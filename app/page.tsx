@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   Sparkles, 
@@ -13,15 +13,75 @@ import {
   CheckCircle2, 
   Copy, 
   Check,
-  ChevronDown
+  ChevronDown,
+  Layers,
+  FileText,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  SearchCheck,
+  DollarSign,
+  ShoppingBag
 } from "lucide-react";
 import { TOOLS, CATEGORIES } from "@/data/tools";
 import { ToolCard } from "@/components/ToolCard";
 import { aiEngine } from "@/lib/ai";
 
+const CATEGORY_META: Record<string, { label: string; desc: string; icon: any }> = {
+  content: {
+    label: "Content & AI Copywriting",
+    desc: "Generate viral posts, ad copy, captions, content calendars, and smart hashtags.",
+    icon: FileText,
+  },
+  image: {
+    label: "Image & Creative Design",
+    desc: "Resize photos, convert file formats, overlay typography, and craft thumbnails.",
+    icon: ImageIcon,
+  },
+  video: {
+    label: "Video & Media Production",
+    desc: "Trim video lengths, extract/remove audio, and generate custom video thumbnails.",
+    icon: VideoIcon,
+  },
+  seo: {
+    label: "SEO & Page Optimization",
+    desc: "Optimize page names, bios, search presence, and complete Facebook audits.",
+    icon: SearchCheck,
+  },
+  ads: {
+    label: "Ads & ROI Calculators",
+    desc: "Calculate ROAS, compute and benchmark CPC/CPM/CTR, and plan ad campaign budgets.",
+    icon: DollarSign,
+  },
+  business: {
+    label: "Business & E-Commerce",
+    desc: "Create persuasive product promotions, flash sale announcements, and discount offers.",
+    icon: ShoppingBag,
+  },
+};
+
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+
+  // Sync anchor hash navigation (#content, #image, #video, #seo, #ads, #business)
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash && ["content", "image", "video", "seo", "ads", "business"].includes(hash)) {
+        setSelectedCategory("all");
+        setTimeout(() => {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
+    };
+
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
 
   // Hero Quick Generator State
   const [quickTopic, setQuickTopic] = useState("");
@@ -55,7 +115,7 @@ export default function HomePage() {
     setTimeout(() => setHasCopied(false), 2000);
   };
 
-  // Filtered Tools
+  // Filtered Tools for search or single category filter
   const filteredTools = TOOLS.filter((tool) => {
     const matchesCategory = selectedCategory === "all" || tool.category === selectedCategory;
     const matchesSearch =
@@ -233,12 +293,107 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Tools Grid */}
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredTools.map((tool) => (
-              <ToolCard key={tool.id} tool={tool} />
-            ))}
-          </div>
+          {/* Tools Grid or Categorized Sections */}
+          {searchQuery.trim() ? (
+            /* Search Results View */
+            <div className="mt-8">
+              <div className="mb-4 flex items-center justify-between">
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  Search results for &quot;{searchQuery}&quot; ({filteredTools.length} found)
+                </span>
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  Clear search
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filteredTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))}
+              </div>
+            </div>
+          ) : selectedCategory !== "all" ? (
+            /* Single Category Filtered View */
+            <div id={selectedCategory} className="mt-8 scroll-mt-24">
+              <div className="mb-6 flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                    {CATEGORY_META[selectedCategory]?.label || CATEGORIES.find(c => c.id === selectedCategory)?.label}
+                  </h3>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    {CATEGORY_META[selectedCategory]?.desc}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelectedCategory("all")}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                >
+                  Show All Tools
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filteredTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))}
+              </div>
+            </div>
+          ) : (
+            /* All Tools Grouped by Category with Anchor IDs */
+            <div className="mt-6 flex flex-col gap-12">
+              {CATEGORIES.filter((cat) => cat.id !== "all").map((cat) => {
+                const categoryTools = TOOLS.filter((t) => t.category === cat.id);
+                const meta = CATEGORY_META[cat.id];
+                const IconComponent = meta?.icon || Layers;
+
+                return (
+                  <div
+                    key={cat.id}
+                    id={cat.id}
+                    className="scroll-mt-24 pt-6 border-t first:border-0 first:pt-2 border-slate-200/80 dark:border-slate-800/80"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
+                          <IconComponent className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                              {meta?.label || cat.label}
+                            </h3>
+                            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                              {categoryTools.length}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                            {meta?.desc}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          setSelectedCategory(cat.id);
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 self-start sm:self-auto hover:underline"
+                      >
+                        Focus this category &rarr;
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {categoryTools.map((tool) => (
+                        <ToolCard key={tool.id} tool={tool} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {filteredTools.length === 0 && (
             <div className="py-16 text-center">
