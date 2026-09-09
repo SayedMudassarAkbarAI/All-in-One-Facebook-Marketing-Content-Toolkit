@@ -8,14 +8,41 @@ import { prisma } from "@/lib/db";
  */
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
-    const signedRequest = formData.get("signed_request") as string;
+    let signedRequest = "";
+    const contentType = req.headers.get("content-type") || "";
 
-    if (!signedRequest) {
-      return NextResponse.json({ error: "Missing signed_request parameter" }, { status: 400 });
+    if (contentType.includes("application/json")) {
+      const json = await req.json().catch(() => ({}));
+      signedRequest = json.signed_request || "";
+    } else if (contentType.includes("form")) {
+      const formData = await req.formData().catch(() => null);
+      if (formData) {
+        signedRequest = (formData.get("signed_request") as string) || "";
+      }
+    } else {
+      const text = await req.text().catch(() => "");
+      const params = new URLSearchParams(text);
+      signedRequest = params.get("signed_request") || "";
     }
 
-    const [encodedSig, payload] = signedRequest.split(".");
+    if (!signedRequest) {
+      // Also check query param fallback
+      signedRequest = req.nextUrl.searchParams.get("signed_request") || "";
+    }
+
+    if (!signedRequest) {
+      return NextResponse.json(
+        { error: "Missing signed_request parameter. Meta sends 'signed_request' via POST form payload." },
+        { status: 400 }
+      );
+    }
+
+    const parts = signedRequest.split(".");
+    if (parts.length !== 2) {
+      return NextResponse.json({ error: "Malformed signed_request parameter" }, { status: 400 });
+    }
+
+    const [encodedSig, payload] = parts;
     const appSecret = process.env.META_APP_SECRET || "default_secret";
 
     // Validate signature
