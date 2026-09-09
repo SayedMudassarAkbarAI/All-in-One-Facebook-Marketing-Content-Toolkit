@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
 
           <h2>1. Overview</h2>
           <p>
-            All-in-One Facebook Marketing & Content Toolkit (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how our web application handles information when you use our free utility tools or connect your Facebook account.
+            The All-in-One Facebook Marketing & Content Toolkit is developed and operated by <strong>SPManchester Private Limited Company</strong>, an international technology and digital solutions firm (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your privacy. This Privacy Policy explains how our web application handles information when you use our free utility tools or connect your Facebook account.
           </p>
 
           <h2>2. Information We Collect</h2>
@@ -61,9 +61,16 @@ export default function PrivacyPolicyPage() {
             or by removing our application from your Facebook account settings.
           </p>
 
-          <h2>4. Contact Us</h2>
+          <h2>4. Corporate Entity & Contact Information</h2>
           <p>
-            If you have questions regarding this Privacy Policy, please reach out via our support portal.
+            <strong>SPManchester Private Limited Company</strong><br />
+            Website: <a href="https://spmanchester.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">spmanchester.com</a><br />
+            Phone: <a href="tel:+923064350580" className="text-blue-600 underline">+92 306 4350580</a><br />
+            Email: <a href="mailto:info@spmanchester.com" className="text-blue-600 underline">info@spmanchester.com</a><br />
+            Services: Web Development, Mobile Apps, Graphic Design, IT Consultancy, Ads Management, SEO, eCommerce, Artificial Intelligence.
+          </p>
+          <p className="text-xs text-slate-500 mt-4">
+            Copyright: © 2026 SPManchester Private Limited Company. All rights reserved.
           </p>
         </div>
       </div>

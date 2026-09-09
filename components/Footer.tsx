@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Facebook, Shield, Heart } from "lucide-react";
+import { Facebook, Shield, Building2, Globe, Phone, Mail, Sparkles } from "lucide-react";
 
 export function Footer() {
   return (
@@ -17,8 +17,8 @@ export function Footer() {
                 Facebook Marketing Toolkit
               </span>
             </Link>
-            <p className="mt-4 max-w-sm text-sm text-slate-600 dark:text-slate-400">
-              The premier free toolkit for creators, agencies, and small businesses to craft viral posts, resize media, optimize SEO, and automate Facebook growth.
+            <p className="mt-4 max-w-sm text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Developed and operated by <strong className="text-slate-800 dark:text-slate-200 font-semibold">SPManchester Private Limited Company</strong>, an international technology and digital solutions firm.
             </p>
             <div className="mt-4 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <Shield className="h-4 w-4 text-emerald-500" />
@@ -97,9 +97,19 @@ export function Footer() {
           {/* Column 3: Legal & Trust */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
-              Legal & Trust
+              Company & Legal
             </h3>
             <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400">
+              <li>
+                <Link href="/about" className="hover:text-blue-600 dark:hover:text-blue-400">
+                  About SPManchester
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400">
+                  Contact Support
+                </Link>
+              </li>
               <li>
                 <Link href="/privacy-policy" className="hover:text-blue-600 dark:hover:text-blue-400">
                   Privacy Policy
@@ -112,7 +122,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/data-deletion" className="hover:text-blue-600 dark:hover:text-blue-400 font-medium text-blue-600 dark:text-blue-400">
-                  Data Deletion Request
+                  Data Deletion
                 </Link>
               </li>
               <li>
@@ -124,13 +134,62 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Corporate Entity Card */}
+        <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60 shadow-sm">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
+                <Building2 className="h-4 w-4 text-blue-600" />
+                <span>SPManchester Private Limited Company</span>
+              </div>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 max-w-2xl">
+                An international technology and digital solutions firm providing cutting-edge social media automation, enterprise web applications, and artificial intelligence software.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-600 dark:text-slate-300">
+                <a
+                  href="https://spmanchester.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+                >
+                  <Globe className="h-3.5 w-3.5 text-slate-400" />
+                  <span>spmanchester.com</span>
+                </a>
+                <a
+                  href="tel:+923064350580"
+                  className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+                >
+                  <Phone className="h-3.5 w-3.5 text-slate-400" />
+                  <span>+92 306 4350580</span>
+                </a>
+                <a
+                  href="mailto:info@spmanchester.com"
+                  className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+                >
+                  <Mail className="h-3.5 w-3.5 text-slate-400" />
+                  <span>info@spmanchester.com</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 pt-4 lg:pt-0 lg:pl-6 text-xs text-slate-500 dark:text-slate-400">
+              <span className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">
+                Core Corporate Services:
+              </span>
+              <span>
+                Web Development • Mobile Apps • Graphic Design • IT Consultancy • Ads Management • SEO • eCommerce • Artificial Intelligence
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Disclaimer Bar */}
-        <div className="mt-10 border-t border-slate-200/80 pt-6 dark:border-slate-800">
+        <div className="mt-8 border-t border-slate-200/80 pt-6 dark:border-slate-800">
           <p className="text-xs text-slate-500 dark:text-slate-500 leading-relaxed">
-            <strong>Disclaimer:</strong> This website is an independent utility and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Meta Platforms, Inc., Facebook, or any of their subsidiaries or affiliates. The official Meta website can be found at <a href="https://about.meta.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-700 dark:hover:text-slate-300">meta.com</a>.
+            <strong>Disclaimer:</strong> This website is an independent utility developed and operated by SPManchester Private Limited Company and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Meta Platforms, Inc., Facebook, or any of their subsidiaries or affiliates.
           </p>
           <div className="mt-4 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <p>© {new Date().getFullYear()} All-in-One Facebook Marketing & Content Toolkit. All rights reserved.</p>
+            <p>© 2026 SPManchester Private Limited Company. All rights reserved.</p>
             <p className="mt-2 sm:mt-0 flex items-center gap-1">
               Built with Next.js 15 & deployed on Vercel
             </p>

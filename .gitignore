@@ -32,6 +32,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# github workflows (requires workflow scope PAT)
+.github/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

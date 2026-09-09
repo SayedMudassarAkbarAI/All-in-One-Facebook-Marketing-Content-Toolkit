@@ -48,6 +48,19 @@ export default function TermsPage() {
           <p>
             All generated copy and edited media created using our free tools belong entirely to you. You retain full ownership and rights over your creative assets.
           </p>
+
+          <h2>4. Corporate Entity</h2>
+          <p>
+            Developed and operated by <strong>SPManchester Private Limited Company</strong>, an international technology and digital solutions firm.<br />
+            Website: <a href="https://spmanchester.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">spmanchester.com</a><br />
+            Phone: <a href="tel:+923064350580" className="text-blue-600 underline">+92 306 4350580</a><br />
+            Email: <a href="mailto:info@spmanchester.com" className="text-blue-600 underline">info@spmanchester.com</a><br />
+            Services: Web Development, Mobile Apps, Graphic Design, IT Consultancy, Ads Management, SEO, eCommerce, Artificial Intelligence.
+          </p>
+
+          <p className="text-xs text-slate-500 mt-6">
+            Copyright: © 2026 SPManchester Private Limited Company. All rights reserved.
+          </p>
         </div>
       </div>
     </div>

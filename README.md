@@ -106,5 +106,18 @@ This product complies with Meta Platform Terms:
 
 ---
 
+## 🏢 Corporate Entity
+
+Developed and operated by **SPManchester Private Limited Company**, an international technology and digital solutions firm.
+
+- **Website**: [spmanchester.com](https://spmanchester.com/)
+- **Phone**: +92 306 4350580
+- **Email**: [info@spmanchester.com](mailto:info@spmanchester.com)
+- **Services**: Web Development, Mobile Apps, Graphic Design, IT Consultancy, Ads Management, SEO, eCommerce, Artificial Intelligence.
+
+**Copyright**: © 2026 SPManchester Private Limited Company. All rights reserved.
+
+---
+
 ## 📄 License
-MIT License. Created and maintained for modern social media creators and agencies.
+MIT License. Created and maintained by SPManchester Private Limited Company for modern social media creators and agencies.
