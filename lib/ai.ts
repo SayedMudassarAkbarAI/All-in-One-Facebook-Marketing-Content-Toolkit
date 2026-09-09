@@ -1,3 +1,7 @@
+import { generateSmartHashtags, HashtagResult, HashtagItem } from "./hashtags";
+
+export type { HashtagResult, HashtagItem };
+
 export interface GeneratePostOptions {
   topic: string;
   tone?: "professional" | "casual" | "engaging" | "humorous" | "urgent" | "storytelling";
@@ -108,13 +112,8 @@ export const aiEngine = {
     ];
   },
 
-  generateHashtags(topic: string): { highVolume: string[]; niche: string[]; branded: string[] } {
-    const clean = topic.replace(/[^a-zA-Z0-9]/g, "");
-    return {
-      highVolume: ["#FacebookMarketing", "#SocialMediaTips", "#DigitalMarketing", "#GrowthHacking", "#Entrepreneur"],
-      niche: [`#${clean}Tips`, `#${clean}Strategy`, `#${clean}Hacks`, `#${clean}Guide`, `#Mastering${clean}`],
-      branded: ["#FacebookToolkit", "#PageGrowth", "#ContentStrategy2025"],
-    };
+  generateHashtags(topic: string, nicheId?: string) {
+    return generateSmartHashtags(topic, nicheId);
   },
 
   generateAdCopy(productOrTopic: string, framework: "AIDA" | "PAS" | "BAB" = "PAS"): {
