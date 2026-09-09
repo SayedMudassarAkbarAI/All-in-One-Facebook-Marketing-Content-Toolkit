@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id               String            @id @default(cuid())
+  email            String?           @unique
+  name             String?
+  avatar           String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  facebookAccounts FacebookAccount[]
+  scheduledPosts   ScheduledPost[]
+  mediaAssets      MediaAsset[]
+}
+
+model FacebookAccount {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  metaUserId         String   @unique
+  name               String?
+  email              String?
+  encryptedUserToken String   // AES-256-GCM encrypted
+  tokenExpiresAt     DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  pages              Page[]
+
+  @@index([userId])
+}
+
+model Page {
+  id                 String            @id @default(cuid())
+  facebookAccountId  String
+  facebookAccount    FacebookAccount   @relation(fields: [facebookAccountId], references: [id], onDelete: Cascade)
+  pageId             String            @unique
+  name               String
+  category           String?
+  tasks              String[]          @default([])
+  isPublished        Boolean           @default(true)
+  fanCount           Int               @default(0)
+  encryptedPageToken String            // AES-256-GCM encrypted
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  scheduledPosts     ScheduledPost[]
+  insights           InsightSnapshot[]
+
+  @@index([facebookAccountId])
+  @@index([pageId])
+}
+
+enum PostStatus {
+  SCHEDULED
+  PUBLISHING
+  PUBLISHED
+  FAILED
+  CANCELLED
+}
+
+enum PostType {
+  STATUS
+  PHOTO
+  VIDEO
+  LINK
+  REEL
+}
+
+model ScheduledPost {
+  id              String     @id @default(cuid())
+  userId          String
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pageId          String
+  page            Page       @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  message         String
+  mediaUrls       String[]   @default([])
+  link            String?
+  postType        PostType   @default(STATUS)
+  scheduledTime   DateTime
+  timezone        String     @default("UTC")
+  status          PostStatus @default(SCHEDULED)
+  publishedPostId String?
+  errorMessage    String?
+  retryCount      Int        @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([pageId])
+  @@index([status, scheduledTime])
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileUrl   String
+  fileName  String
+  fileType  String
+  fileSize  Int
+  width     Int?
+  height    Int?
+  duration  Float?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+enum JobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model VideoJob {
+  id           String    @id @default(cuid())
+  jobType      String    // e.g. "trim", "compress", "captions", "thumbnail"
+  status       JobStatus @default(QUEUED)
+  progress     Int       @default(0)
+  inputUrl     String
+  outputUrl    String?
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([status])
+}
+
+model InsightSnapshot {
+  id               String   @id @default(cuid())
+  pageId           String
+  page             Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  date             DateTime
+  reach            Int      @default(0)
+  impressions      Int      @default(0)
+  engagedUsers     Int      @default(0)
+  pageFans         Int      @default(0)
+  postEngagements  Int      @default(0)
+  videoViews       Int      @default(0)
+  createdAt        DateTime @default(now())
+
+  @@unique([pageId, date])
+  @@index([pageId])
+}
+
+model DataDeletionLog {
+  id               String    @id @default(cuid())
+  confirmationCode String    @unique
+  userId           String?
+  metaUserId       String
+  status           String    @default("PENDING") // PENDING, COMPLETED
+  requestedAt      DateTime  @default(now())
+  completedAt      DateTime?
+
+  @@index([confirmationCode])
+  @@index([metaUserId])
+}
